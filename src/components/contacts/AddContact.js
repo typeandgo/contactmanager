@@ -21,35 +21,17 @@ class AddContact extends Component {
     // Check for errors
 
     if (name === '') {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          name: 'Name is required'
-        }
-      });
-
+      this.setState({ errors: { ...this.state.errors, name: 'Name is required' }});
       return;
     }
 
     if (email === '') {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          email: 'Email is required'
-        }
-      });
-
+      this.setState({ errors: { ...this.state.errors, email: 'Email is required' }});
       return;
     }
 
     if (phone === '') {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          phone: 'Phone is required'
-        }
-      });
-
+      this.setState({ errors: { ...this.state.errors, phone: 'Phone is required' }});
       return;
     }
 

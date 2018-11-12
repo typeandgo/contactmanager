@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Consumer } from '../../context';
 import TextInputGroup from '../layout/TextInputGroup';
 
-
 class EditContact extends Component {
   state = {
     name: '',
@@ -14,14 +13,23 @@ class EditContact extends Component {
 
   async componentDidMount () {
     const { id } = this.props.match.params;
-    const res = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
-    const contact = res.data;
 
-    this.setState({
-      name: contact.name,
-      email: contact.email,
-      phone: contact.phone,
-    });
+    try {
+      
+      const res = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
+      const contact = res.data;
+  
+      this.setState({
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+      });
+
+    } catch (e) {
+
+      console.log("e: ", e);
+    }
+    
   }
 
   onSubmit = async (dispatch, e) => {
@@ -32,35 +40,17 @@ class EditContact extends Component {
     // Check for errors
 
     if (name === '') {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          name: 'Name is required'
-        }
-      });
-
+      this.setState({ errors: { ...this.state.errors, name: 'Name is required' }});
       return;
     }
 
     if (email === '') {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          email: 'Email is required'
-        }
-      });
-
+      this.setState({ errors: { ...this.state.errors, email: 'Email is required' }});
       return;
     }
 
     if (phone === '') {
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          phone: 'Phone is required'
-        }
-      });
-
+      this.setState({ errors: { ...this.state.errors, phone: 'Phone is required' }});
       return;
     }
 
@@ -70,9 +60,25 @@ class EditContact extends Component {
       phone
     };
     const { id } = this.props.match.params;
-    const res = await axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, updateContact);
 
-    dispatch({ type: 'UPDATE_CONTACT', payload: res.data });
+    try {
+
+      const res = await axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, updateContact);
+
+      dispatch({ type: 'UPDATE_CONTACT', payload: res.data });
+
+    } catch (e) {
+
+      const updateContactWithId = {
+        ...updateContact,
+        id
+      };
+
+      console.log("updateContactWithId: ", updateContactWithId);
+
+      dispatch({ type: 'UPDATE_CONTACT', payload: updateContactWithId });
+    }
+
     this.clearInputs();
     this.props.history.push('/');
   }
